@@ -9,7 +9,7 @@ const exec = util.promisify(require("child_process").exec);
 const constants = require("./constants.json");
 
 let allCards = {};
-let config, deck;
+let config, deck, wish;
 
 function sleep(ms) { 
 	return new Promise((done) => {
@@ -94,12 +94,25 @@ async function process() {
 	}
 	console.clear();
 	displayDeck(newDeck);
-	console.log("====================================");
-	displayDeck(newDeck.slice(0, config.first ? 5 : 6));
+	console.log("========================");
+	const hand = newDeck.slice(0, 5);
+	displayDeck(hand);
+	if (wish) { 
+		console.log("========================");
+		console.log(await wish({
+			deck: newDeck,
+			hand,
+			first: config.first
+		}))
+	}
 }
 
 async function main() { 
 	config = yaml.parse(await fs.promises.readFile("./config.yaml", "utf-8"));
+	if (config.wishScript) { 
+		wish = require(config.wishScript);
+		console.log(`Loaded wish script ${config.wishScript} .`);
+	}
 	for (let path of config.cdb) {
 		await readDatabase(path);
 	}

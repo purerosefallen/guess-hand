@@ -1,6 +1,6 @@
-deck: ./deck/OCG/dino.ydk
+deck: ./deck/examle.ydk
 cdb: 
   - ./cards.cdb
-  - ./expansions/222DIY.cdb
 first: true
 opponentDeckCount: 40
+wishScript: './wish.example.js'
