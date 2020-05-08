@@ -1,0 +1,26 @@
+{
+  "name": "guess-hand",
+  "version": "1.0.0",
+  "description": "Guess hand",
+  "main": "run.js",
+  "scripts": {
+    "install": "cd mtguess && g++ -o mtguess mtguess.cpp",
+    "start": "node run.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/purerosefallen/guess-hand.git"
+  },
+  "author": "Nanahira",
+  "license": "AGPL-3.0",
+  "bugs": {
+    "url": "https://github.com/purerosefallen/guess-hand/issues"
+  },
+  "homepage": "https://github.com/purerosefallen/guess-hand#readme",
+  "dependencies": {
+    "moment": "^2.25.3",
+    "sqlite3": "^4.2.0",
+    "underscore": "^1.10.2",
+    "yaml": "^1.9.2"
+  }
+}

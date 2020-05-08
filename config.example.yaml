@@ -1,0 +1,6 @@
+deck: ./deck/OCG/dino.ydk
+cdb: 
+  - ./cards.cdb
+  - ./expansions/222DIY.cdb
+first: true
+opponentDeckCount: 40
