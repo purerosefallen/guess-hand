@@ -82,11 +82,11 @@ function displayDeck(deck) {
 }
 
 async function process() { 
-	await waitUntilNextSecond();
 	let counts = [deck.length];
 	if (!config.first) {
 		counts.unshift(config.opponentDeckCount);
 	}
+	await waitUntilNextSecond();
 	const sequence = (await getSequence(counts))[config.first ? 0 : 1];
 	const newDeck = [];
 	for (let i in sequence) {
