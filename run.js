@@ -113,9 +113,7 @@ async function main() {
 		wish = require(config.wishScript);
 		console.log(`Loaded wish script ${config.wishScript} .`);
 	}
-	for (let path of config.cdb) {
-		await readDatabase(path);
-	}
+	await Promise.all(config.cdb.map(readDatabase));
 	deck = await readDeck(config.deck);
 	while (true) {
 		await process();
