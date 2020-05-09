@@ -65,7 +65,8 @@ async function readDeck(path) {
 }
 
 async function getSequence(offset, counts) { 
-	const cmd = `./mtguess/mtguess ${offset} ${counts.map(m => m.toString()).join(' ')}`;
+	//const cmd = `./mtguess/mtguess ${offset} ${counts.map(m => m.toString()).join(' ')}`;
+	const cmd = `./mtguess/mtguess ${counts.map(m => m.toString()).join(' ')}`;
 	const out = (await exec(cmd)).stdout;
 	return out.trim().split('\n').map(m => {
 		return m.trim().split(' ').map((num) => { 
