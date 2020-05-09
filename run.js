@@ -64,8 +64,8 @@ async function readDeck(path) {
 	return deck;
 }
 
-async function getSequence(counts) { 
-	const cmd = `./mtguess/mtguess ${counts.map(m => m.toString()).join(' ')}`;
+async function getSequence(offset, counts) { 
+	const cmd = `./mtguess/mtguess ${offset} ${counts.map(m => m.toString()).join(' ')}`;
 	const out = (await exec(cmd)).stdout;
 	return out.trim().split('\n').map(m => {
 		return m.trim().split(' ').map((num) => { 
@@ -81,29 +81,42 @@ function displayDeck(deck) {
 	console.log(deckNames.join('\t'));
 }
 
-async function process() { 
+async function getSingleDeck(offset, deck) { 
 	let counts = [deck.length];
 	if (!config.first) {
 		counts.unshift(config.opponentDeckCount);
 	}
-	await waitUntilNextSecond();
-	const sequence = (await getSequence(counts))[config.first ? 0 : 1];
+	const sequence = (await getSequence(++offset, counts))[config.first ? 0 : 1];
 	const newDeck = [];
 	for (let i in sequence) {
 		newDeck[i] = deck[sequence[i]];
 	}
-	console.clear();
-	displayDeck(newDeck);
-	console.log("========================");
-	const hand = newDeck.slice(0, 5);
-	displayDeck(hand);
-	if (wish) { 
-		console.log("========================");
-		console.log(await wish({
-			deck: newDeck,
+	return newDeck;
+}
+
+async function process() { 
+	await waitUntilNextSecond();
+	let offset = 0;
+	let decks = [];
+	while (true) { 
+		const single = await getSingleDeck(offset, deck);
+		decks[offset++] = single;
+		const hand = single.slice(0, 5);
+		if (!wish || await wish({
+			deck: single,
 			hand,
 			first: config.first
 		}))
+			break;
+	}
+	console.clear();
+	displayDeck(decks[0]);
+	console.log("========================");
+	const hand = decks[0].slice(0, 5);
+	displayDeck(hand);
+	if (wish) {
+		console.log("========================");
+		console.log(decks.length === 1 ? "OK" : `Remaining: ${decks.length - 1}`);
 	}
 }
 
