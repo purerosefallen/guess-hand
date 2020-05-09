@@ -20,11 +20,11 @@ std::vector<char> getSingle(mtrandom *rnd, int count)
 
 int main(int argc, char *argv[])
 {
-	const int offset = atoi(argv[1]);
+	//const int offset = atoi(argv[1]);
 	mtrandom rnd;
 	time_t seed = time(0);
-	rnd.reset((seed + offset) % __UINT32_MAX__);
-	for (int i = 2; i < argc; ++i)
+	rnd.reset(seed % __UINT32_MAX__);
+	for (int i = 1; i < argc; ++i)
 	{
 		const int count = atoi(argv[i]);
 		std::vector<char> sequence = getSingle(&rnd, count);
