@@ -26,7 +26,7 @@ I'm not responsed for what you did with this project. Using this project in tour
 
 * Make custom scripts if you need.
 
-* Start your match. You have to win the rock-paper-scissors to make this system work, but don't make decision if you go first of next.
+* Start your match. You have to win the rock-paper-scissors to make this system work, but don't make decision if you go first or next.
 
 * If you wish to go first, just run. If wish to go second, you have to check the opponent's deck count and write it into `config.yaml`.
 
