@@ -4,3 +4,4 @@ cdb:
 first: true
 opponentDeckCount: 40
 wishScript: './wish.example.js'
+exitWhenWish: true

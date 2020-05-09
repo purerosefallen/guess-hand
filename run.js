@@ -115,9 +115,12 @@ async function process() {
 	const hand = decks[0].slice(0, 5);
 	displayDeck(hand);
 	if (wish) {
+		const ok = decks.length === 1;
 		console.log("========================");
-		console.log(decks.length === 1 ? "OK" : `Remaining: ${decks.length - 1}`);
+		console.log(ok ? "OK" : `Remaining: ${decks.length - 1}`);
+		return ok && config.exitWhenWish;
 	}
+	return false;
 }
 
 async function main() { 
@@ -128,9 +131,7 @@ async function main() {
 	}
 	await Promise.all(config.cdb.map(readDatabase));
 	deck = await readDeck(config.deck);
-	while (true) {
-		await process();
-	}
+	while (!await process());
 }
 
 main();
