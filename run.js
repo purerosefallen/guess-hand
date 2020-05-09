@@ -119,10 +119,10 @@ async function getSingleDeck(offset, deck) {
 async function process() { 
 	await waitUntilNextSecond();
 	let offset = 0;
-	let decks = [];
+	/*let decks = [];
 	while (true) { 
 		const single = await getSingleDeck(offset, deck);
-		decks[offset++] = single;
+		decks[++offset] = single;
 		const hand = single.slice(0, 5);
 		if (!wish || await getWish({
 			deck: single,
@@ -130,16 +130,23 @@ async function process() {
 			first: config.first
 		}))
 			break;
-	}
+	}*/
+	const decks = [await getSingleDeck(0, deck)];
+
 	console.clear();
 	displayDeck(decks[0]);
 	console.log("========================");
 	const hand = decks[0].slice(0, 5);
 	displayDeck(hand);
 	if (wish) {
-		const ok = decks.length === 1;
+		const ok = await getWish({
+			deck: decks[0],
+			hand,
+			first: config.first
+		});
 		console.log("========================");
-		console.log(ok ? "OK" : `Remaining: ${decks.length - 1}`);
+		//console.log(ok ? "OK" : `Remaining: ${decks.length - 1}`);
+		console.log(ok ? "OK" : `Wait`);
 		return ok && config.exitWhenWish;
 	}
 	return false;
