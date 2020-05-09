@@ -81,6 +81,28 @@ function displayDeck(deck) {
 	console.log(deckNames.join('\t'));
 }
 
+function encryptDeck(deck) { 
+	let deckBuffer = Buffer.alloc(deck.length * 4);
+	let pointer = 0;
+	for (let card of deck) { 
+		deckBuffer.writeInt32LE(card, pointer);
+		pointer += 4;
+	}
+	return deckBuffer.toString("base64");
+}
+
+let cache = {}
+
+async function getWish(info) { 
+	let encryptedDeck = encryptDeck(info.deck);
+	if (cache[encryptedDeck]) { 
+		return cache[encryptedDeck] === 1;
+	}
+	let res = await wish(info);
+	cache[encryptedDeck] = (res ? 1 : -1);
+	return res;
+}
+
 async function getSingleDeck(offset, deck) { 
 	let counts = [deck.length];
 	if (!config.first) {
@@ -102,7 +124,7 @@ async function process() {
 		const single = await getSingleDeck(offset, deck);
 		decks[offset++] = single;
 		const hand = single.slice(0, 5);
-		if (!wish || await wish({
+		if (!wish || await getWish({
 			deck: single,
 			hand,
 			first: config.first
